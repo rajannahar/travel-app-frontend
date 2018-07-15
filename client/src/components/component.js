@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {Card, Col, Row, Preloader} from 'react-materialize';
 import SortBy from './sortBy';
 import FilterName from './filterName';
-import FilterStars from './filterStars';
+// import FilterStars from './filterStars';
 import $ from 'jquery';
 
-let initialState = {};
+// let initialState = {};
 
 class Client extends Component {
 
@@ -28,7 +28,7 @@ class Client extends Component {
                 hotels:hotelData
             });
 
-            initialState = {...this.state};
+            // initialState = {...this.state};
         }));
     };
 
@@ -40,19 +40,17 @@ class Client extends Component {
 
         this.setState({
             sortBy: event.target.value
-        })
-
+        });
         let newObj = [...this.state.hotels];
         
         switch(this.state.sortBy) {
             case("1"):
                 console.log("Distance - low to high", event.target.value);
-                // newObj.sort((a, b) => a.Distance - b.Distance);
-                // this.setState({
-                //     ...this.state,
-                //     hotels: newObj
-                // });
-                return newObj.sort((a, b) => a.Distance - b.Distance);
+                newObj.sort((a, b) => a.Distance - b.Distance);
+                this.setState({
+                    ...this.state,
+                    hotels: newObj
+                });
                 break;
             
             case("2"):
@@ -123,11 +121,6 @@ class Client extends Component {
                 // this.apidata();
         }
 
-        this.test();
-    }
-
-    test = () => {
-        console.log("..... ",this.state.sortBy);
     }
 
     resetData = () => {
@@ -162,15 +155,13 @@ class Client extends Component {
    // if (this.state.hotels.length) {
         console.log("load");
 
-        let a, b;
-        const {hotels, sortBy} = this.state;
+        const {hotels} = this.state;
 
         let hotelsToRender = hotels ? hotels.filter(hotel => 
             hotel.Name.toLowerCase().includes(
                 this.state.filterName.toLowerCase())
         ) : [];
 
-        hotelsToRender = sortBy ? hotelsToRender.sort((a, b)) : hotelsToRender; 
 
         return (
             
@@ -233,7 +224,6 @@ class Client extends Component {
             </div>
 
         );
-    
 
   }
 }
