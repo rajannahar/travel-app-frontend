@@ -19,7 +19,8 @@ class Client extends Component {
     }
 
     apidata = () => {
-        fetch('/api')
+        // fetch('/api')
+        fetch('https://travel-app-backend-rn.herokuapp.com/api')
         .then(res => res.json()
         .then(data => {
             const hotelData = data.Establishments;
