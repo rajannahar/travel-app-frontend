@@ -19,10 +19,14 @@ class Client extends Component {
     }
 
     apidata = () => {
+        window.location.href.includes("localhost")
+        ? console.log("localhost")
+        : console.log("not localhost")
 
         window.location.href.includes("localhost")
         ? fetch('/api')
         : fetch('https://travel-app-backend-rn.herokuapp.com/api')
+        
         .then(res => res.json()
         .then(data => {
             const hotelData = data.Establishments;
