@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Card, Col, Row, Preloader} from 'react-materialize';
 import SortBy from './sortBy';
 import FilterName from './filterName';
-// import FilterStars from './filterStars';
+import FilterStars from './filterStars';
 import $ from 'jquery';
 
 // let initialState = {};
@@ -14,19 +14,24 @@ class Client extends Component {
         this.state = {
             hotels: [], 
             sortBy: '',
-            filterName: ''
+            filterName: '',
+            filterStars: ''
         }
     }
 
     apidata = () => {
+
         window.location.href.includes("localhost")
         ? console.log("localhost")
         : console.log("not localhost")
 
+        let dataSource;
+
         window.location.href.includes("localhost")
-        ? fetch('/api')
-        : fetch('https://travel-app-backend-rn.herokuapp.com/api')
+        ? dataSource = '/api/' //development backend server url
+        : dataSource = 'https://travel-app-frontend-rn.herokuapp.com/api/' //heroku backend server url
         
+        fetch(dataSource)
         .then(res => res.json()
         .then(data => {
             const hotelData = data.Establishments;
@@ -147,13 +152,10 @@ class Client extends Component {
 
     handleFilterStars = (event) => {
         let starInput = parseInt($(".filterStars input").val(), 10);
-
-        let newState = [...this.state.hotels]
-        newState = newState.filter(hotel => hotel.Stars === starInput);
-
+        console.log("starInput: ",starInput, typeof(starInput));
         this.setState({
-            hotels: newState,
-        });
+            filterStars: starInput
+        })
     };
 
     
@@ -164,75 +166,101 @@ class Client extends Component {
 
         const {hotels} = this.state;
 
-        let hotelsToRender = hotels ? hotels.filter(hotel => 
-            hotel.Name.toLowerCase().includes(
-                this.state.filterName.toLowerCase())
-        ) : [];
+        let hotelFilterStars = [];
+        let hotelsToRender = [];
+
+        let filterStarsLength = this.state.filterStars.length !== 0;        
+        
+        filterStarsLength   
+            ? hotels.filter( hotel => {
+                hotel.Stars === this.state.filterStars 
+                    ? hotelFilterStars.push(hotel)
+                    : []
+            })
+            : []
+            
+        console.log("hotelFilterStars: ",hotelFilterStars.length, hotelFilterStars);
+
+        
+        hotelFilterStars.length > 0
+            ? hotelsToRender = hotelFilterStars.filter(hotel => 
+                hotel.Name.toLowerCase().includes(
+                    this.state.filterName.toLowerCase())
+            )
+            : hotelsToRender = hotels.filter(hotel => 
+                hotel.Name.toLowerCase().includes(
+                    this.state.filterName.toLowerCase())
+            )
 
 
         return (
             
             <div className="client">
-            
                 
-            {this.state.hotels.length ? 
-                <div className="container">
+                {this.state.hotels.length 
+                    ? <div className="container">
 
-                    <Row>
-                        <SortBy 
-                            handleSort={this.handleSort.bind(this)}
-                        />
-                    </Row>
+                            <Row>
+                                <SortBy 
+                                    handleSort={this.handleSort.bind(this)}
+                                />
+                            </Row>
 
-                    <Row>
-                        <FilterName 
-                            handleFilterName={this.handleFilterName.bind(this)} 
-                            resetData={this.resetData.bind(this)} 
-                        />
-                    </Row>
+                            <Row>
+                                <FilterName 
+                                    handleFilterName={this.handleFilterName.bind(this)} 
+                                    resetData={this.resetData.bind(this)} 
+                                />
+                            </Row>
 
-                    <Row>
-                            
-                        { hotelsToRender.map(hotel =>
-                        
-                            <Col m={6} s={12} key={hotel.EstablishmentId}>
-                                <Card>
-                                    <div className="card-image">
-                                        <img src={hotel.ImageUrl} alt="" />
-                                        <span className="card-title">{hotel.Name}</span>
-                                    </div>
-                                    <div className="card-content">
-                                        <p><b>Type: </b>{hotel.EstablishmentType}</p>
-                                        <p><b>Location: </b>{hotel.Location}</p>
-                                        <p><b>Minimum cost: </b>£{hotel.MinCost}</p>
-                                        <p><b>Stars: </b>{hotel.Stars}</p>
-                                        <p><b>User rating: </b>{hotel.UserRating}</p>
-                                        <p><b>User rating title: </b>{hotel.UserRatingTitle}</p>
-                                        <p><b>User rating count: </b>{hotel.UserRatingCount}</p>
-                                        <p><b>Distance: </b>{parseFloat(hotel.Distance).toFixed(2)}</p>
-                                    </div>
-                                </Card>
-                            </Col>
-                            
-                        )}
+                            <Row>
+                                <FilterStars 
+                                    handleFilterStars={this.handleFilterStars.bind(this)}
+                                />
+                            </Row>
 
-                    </Row>
-                </div>
+                            <Row>
+                                    
+                                { hotelsToRender.map(hotel =>
+                                
+                                    <Col m={6} s={12} key={hotel.EstablishmentId}>
+                                        <Card>
+                                            <div className="card-image">
+                                                <img src={hotel.ImageUrl} alt="" />
+                                                <span className="card-title">{hotel.Name}</span>
+                                            </div>
+                                            <div className="card-content">
+                                                <p><b>Type: </b>{hotel.EstablishmentType}</p>
+                                                <p><b>Location: </b>{hotel.Location}</p>
+                                                <p><b>Minimum cost: </b>£{hotel.MinCost}</p>
+                                                <p><b>Stars: </b>{hotel.Stars}</p>
+                                                <p><b>User rating: </b>{hotel.UserRating}</p>
+                                                <p><b>User rating title: </b>{hotel.UserRatingTitle}</p>
+                                                <p><b>User rating count: </b>{hotel.UserRatingCount}</p>
+                                                <p><b>Distance: </b>{parseFloat(hotel.Distance).toFixed(2)}</p>
+                                            </div>
+                                        </Card>
+                                    </Col>
+                                    
+                                )}
+
+                            </Row>
+                        </div>
 
                     :  <div className="container">
-                        <Row>
-                            <Col s={12}>
-                                <Preloader flashing size='big'/>
-                            </Col>
-                        </Row> 
-                    </div>
-                }
+                            <Row>
+                                <Col s={12}>
+                                    <Preloader flashing size='big'/>
+                                </Col>
+                            </Row> 
+                        </div>
+                    }
 
             </div>
 
         );
 
-  }
+    }
 }
 
 export default Client;
