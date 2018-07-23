@@ -9,15 +9,24 @@ import $ from 'jquery';
 
 class Client extends Component {
 
-    constructor() {
-        super();
-        this.state = {
-            hotels: [], 
-            sortBy: '',
-            filterName: '',
-            filterStars: ''
-        }
+    /* constructor - deprecated with React 16 */
+    // constructor() {
+    //     super();
+    //     this.state = {
+    //         hotels: [], 
+    //         sortBy: '',
+    //         filterName: '',
+    //         filterStars: ''
+    //     }
+    // }
+
+    state = {
+        hotels: [], 
+        sortBy: '',
+        filterName: '',
+        filterStars: ''
     }
+
 
     apidata = () => {
 
