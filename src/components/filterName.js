@@ -1,18 +1,13 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {Row, Input, Button} from 'react-materialize';
-class FilterName extends Component {
 
-    render(props) {
+const FilterName = props => (
 
-        let {handleFilterName, resetData} = this.props;
+    <Row> 
+        <Input className="filterName" placeholder="Filter by name" s={6} onKeyUp={props.handleFilterName} />                
+        <Button waves='light' type="submit" s={3} onClick={props.resetData}>Reset</Button>
+    </Row>
 
-        return (
-            <Row> 
-                <Input className="filterName" placeholder="Filter by name" s={6} onKeyUp={handleFilterName} />                
-                <Button waves='light' type="submit" s={3} onClick={resetData}>Reset</Button>
-            </Row>
-        );
-    }
-}
+);
 
 export default FilterName;
