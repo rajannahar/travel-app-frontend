@@ -1,10 +1,10 @@
 import React from 'react';
 import {Input} from 'react-materialize';
 
-const FilterStars = props => (
+const FilterUserRatings = props => (
     
-    <Input className="filterStars" s={12} m={4} type='select' defaultValue='' onChange={props.handleFilterStars} >
-        <option key="" value="">Filter Stars:</option>
+    <Input className="filterUserRatings" s={12} m={4} type='select' defaultValue='' onChange={props.handleFilterRatings} >
+        <option key="" value="">Filter User Ratings:</option>
         <option key="0" value="0">0 Star</option>
         <option key="1" value="1">1 Star</option>
         <option key="2" value="2">2 Stars</option>
@@ -15,4 +15,4 @@ const FilterStars = props => (
 
 );
 
-export default FilterStars;
+export default FilterUserRatings;

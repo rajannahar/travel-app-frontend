@@ -7,7 +7,7 @@ class SortBy extends Component {
         let {handleSort} = this.props;
 
         return (
-            <Row>
+            //<Row>
                 <Input s={12} type='select' defaultValue='' onChange={handleSort}  >
                     <option value="">Sort by:</option>
                     <option value="1">Distance - low to high</option>
@@ -19,7 +19,7 @@ class SortBy extends Component {
                     <option value="7">User Rating - low to high</option>
                     <option value="8">User Rating - high to low</option>
                 </Input>
-            </Row>
+            //</Row>
         );
     }
 }

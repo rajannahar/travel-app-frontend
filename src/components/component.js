@@ -3,9 +3,12 @@ import {Card, Col, Row, Preloader} from 'react-materialize';
 import SortBy from './sortBy';
 import FilterName from './filterName';
 import FilterStars from './filterStars';
-import $ from 'jquery';
+import FilterUserRatings from './filterUserRatings';
+import FilterMinCost from './filterMinCost';
 
-// let initialState = {};
+import ResetButton from './resetButton';
+
+let initialState = {};
 
 class Client extends Component {
 
@@ -24,7 +27,9 @@ class Client extends Component {
         hotels: [], 
         sortBy: '',
         filterName: '',
-        filterStars: ''
+        filterStars: '',
+        filterUserRating: '',
+        filterMinCost: ''
     }
 
 
@@ -49,7 +54,8 @@ class Client extends Component {
                 hotels:hotelData
             });
 
-            // initialState = {...this.state};
+            // copy of the original data from fetch
+            initialState = {...this.state};
         }));
     };
 
@@ -66,7 +72,6 @@ class Client extends Component {
         
         switch(this.state.sortBy) {
             case("1"):
-                console.log("Distance - low to high", event.target.value);
                 newObj.sort((a, b) => a.Distance - b.Distance);
                 this.setState({
                     ...this.state,
@@ -75,7 +80,6 @@ class Client extends Component {
                 break;
             
             case("2"):
-                // console.log("Distance - high to low");
                 newObj.sort((a, b) => b.Distance - a.Distance);
                 this.setState({
                     ...this.state,
@@ -84,7 +88,6 @@ class Client extends Component {
                 break;
             
             case("3"):
-                // console.log("Stars - low to high");
                 newObj.sort((a, b) => a.Stars - b.Stars);
                 this.setState({
                     ...this.state,
@@ -93,7 +96,6 @@ class Client extends Component {
                 break;
                 
             case("4"):
-                // console.log("Stars - high to low");
                 newObj.sort((a, b) => b.Stars - a.Stars);
                 this.setState({
                     ...this.state,
@@ -102,7 +104,6 @@ class Client extends Component {
                 break;
             
             case("5"):
-                // console.log("Min cost - low to high");
                 newObj.sort((a, b) => a.MinCost - b.MinCost);
                 this.setState({
                     ...this.state,
@@ -111,7 +112,6 @@ class Client extends Component {
                 break;
 
             case("6"):
-                // console.log("Min cost - high to low");
                 newObj.sort((a, b) => b.MinCost - a.MinCost);
                 this.setState({
                     ...this.state,
@@ -120,7 +120,6 @@ class Client extends Component {
                 break;
 
             case("7"):
-                // console.log("User rating - low to high");
                 newObj.sort((a, b) => a.UserRating - b.UserRating);
                 this.setState({
                     ...this.state,
@@ -129,7 +128,6 @@ class Client extends Component {
                 break;
 
             case("8"):
-                // console.log("User rating - high to low");
                 newObj.sort((a, b) => b.UserRating - a.UserRating);
                 this.setState({
                     ...this.state,
@@ -138,8 +136,10 @@ class Client extends Component {
                 break;
             
             default:
-                console.log("default");
-                // this.apidata();
+                this.setState({
+                    ...this.state,
+                    hotels: initialState.hotels
+                });
         }
 
     }
@@ -148,7 +148,7 @@ class Client extends Component {
         this.setState({
             filterName: ''
         });
-        $(".filterName").val("");
+        document.querySelector(".filterName").value="";
     }
 
     handleFilterName = (event) => {
@@ -160,7 +160,7 @@ class Client extends Component {
     };
 
     handleFilterStars = (event) => {
-        let starInput = parseInt($(".filterStars input").val(), 10);
+        let starInput = parseInt(document.querySelector(".filterStars input").value, 10);
         console.log("starInput: ",starInput, typeof(starInput));
         this.setState({
             filterStars: starInput
@@ -210,22 +210,21 @@ class Client extends Component {
                     ? <div className="container">
 
                             <Row>
-                                <SortBy 
-                                    handleSort={this.handleSort.bind(this)}
-                                />
+                                <SortBy handleSort={this.handleSort} />
                             </Row>
 
                             <Row>
-                                <FilterName 
-                                    handleFilterName={this.handleFilterName.bind(this)} 
-                                    resetData={this.resetData.bind(this)} 
-                                />
+                                <FilterName handleFilterName={this.handleFilterName} />
                             </Row>
 
                             <Row>
-                                <FilterStars 
-                                    handleFilterStars={this.handleFilterStars.bind(this)}
-                                />
+                                <FilterStars handleFilterStars={this.handleFilterStars}/>
+                                <FilterUserRatings />
+                                <FilterMinCost />
+                            </Row>
+
+                            <Row>
+                                <ResetButton resetData={this.resetData} />
                             </Row>
 
                             <Row>
