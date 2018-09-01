@@ -11,17 +11,6 @@ import ResetButton from "./resetButton";
 let initialState = {};
 
 class Client extends Component {
-  /* constructor - deprecated with React 16 */
-  // constructor() {
-  //     super();
-  //     this.state = {
-  //         hotels: [],
-  //         sortBy: '',
-  //         filterName: '',
-  //         filterStars: ''
-  //     }
-  // }
-
   state = {
     hotels: [],
     sortBy: "",
@@ -158,7 +147,6 @@ class Client extends Component {
       document.querySelector(".filterStars input").value,
       10
     );
-    console.log("starInput: ", starInput, typeof starInput);
     this.setState({
       filterStars: starInput
     });
@@ -172,7 +160,6 @@ class Client extends Component {
     this.setState({
       filterUserRating: userRatingInput
     });
-    console.log("hi ", userRatingInput);
   };
 
   render() {
@@ -181,46 +168,32 @@ class Client extends Component {
 
     const { hotels } = this.state;
 
-    let hotelFilterStars = [];
-    let hotelFilterUserRatings = [];
     let hotelsToRender = [];
+    let filteredHotels = [];
 
     let filterStarsLength = this.state.filterStars.length !== 0;
-
     let filterUserRatingsLength = this.state.filterUserRating.length !== 0;
 
     filterStarsLength
-      ? hotels.filter(hotel => {
-          hotel.Stars === this.state.filterStars
-            ? hotelFilterStars.push(hotel)
-            : [];
-        })
+    ? hotels.filter(hotel => {
+      hotel.Stars === this.state.filterStars
+      ? filteredHotels.push(hotel)
       : [];
+    })
+    : filteredHotels;
 
     filterUserRatingsLength
-      ? hotels.filter(hotel => {
+    ? hotels.filter(hotel => {
           hotel.UserRating === this.state.filterUserRating
-            ? hotelFilterUserRatings.push(hotel)
+            ? filteredHotels.push(hotel)
             : [];
         })
-      : [];
+      : filteredHotels;
 
-    console.log(
-      "hotelFilterStars: ",
-      hotelFilterStars.length,
-      hotelFilterStars
-    );
+    console.log("1 - ", filteredHotels) 
 
-    hotelFilterStars.length > 0
-      ? (hotelsToRender = hotelFilterStars.filter(hotel =>
-          hotel.Name.toLowerCase().includes(this.state.filterName.toLowerCase())
-        ))
-      : (hotelsToRender = hotels.filter(hotel =>
-          hotel.Name.toLowerCase().includes(this.state.filterName.toLowerCase())
-        ));
-
-    hotelFilterUserRatings.length > 0
-      ? (hotelsToRender = hotelFilterUserRatings.filter(hotel =>
+    filteredHotels.length > 0
+      ? (hotelsToRender = filteredHotels.filter(hotel =>
           hotel.Name.toLowerCase().includes(this.state.filterName.toLowerCase())
         ))
       : (hotelsToRender = hotels.filter(hotel =>
